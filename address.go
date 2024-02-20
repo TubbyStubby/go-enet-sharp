@@ -4,7 +4,7 @@ import (
 	"unsafe"
 )
 
-// #include "enet/enet.h"
+// #include "enet.h"
 import "C"
 
 // Address specifies a portable internet address structure.

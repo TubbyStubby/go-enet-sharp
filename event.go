@@ -1,6 +1,6 @@
 package enet
 
-// #include "enet/enet.h"
+// #include "enet.h"
 import "C"
 
 // EventType is a type of event
