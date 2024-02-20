@@ -1,6 +1,6 @@
 package enet
 
-// #include <enet/enet.h>
+// #include "enet/enet.h"
 import "C"
 import (
 	"encoding/binary"
@@ -42,7 +42,7 @@ type Peer interface {
 }
 
 type enetPeer struct {
-	cPeer *C.struct__ENetPeer
+	cPeer *C.ENetPeer
 }
 
 func (peer enetPeer) GetAddress() Address {
@@ -54,21 +54,21 @@ func (peer enetPeer) GetAddress() Address {
 func (peer enetPeer) Disconnect(data uint32) {
 	C.enet_peer_disconnect(
 		peer.cPeer,
-		(C.enet_uint32)(data),
+		(C.uint32_t)(data),
 	)
 }
 
 func (peer enetPeer) DisconnectNow(data uint32) {
 	C.enet_peer_disconnect_now(
 		peer.cPeer,
-		(C.enet_uint32)(data),
+		(C.uint32_t)(data),
 	)
 }
 
 func (peer enetPeer) DisconnectLater(data uint32) {
 	C.enet_peer_disconnect_later(
 		peer.cPeer,
-		(C.enet_uint32)(data),
+		(C.uint32_t)(data),
 	)
 }
 
@@ -91,7 +91,7 @@ func (peer enetPeer) SendString(str string, channel uint8, flags PacketFlags) er
 func (peer enetPeer) SendPacket(packet Packet, channel uint8) error {
 	C.enet_peer_send(
 		peer.cPeer,
-		(C.enet_uint8)(channel),
+		(C.uint8_t)(channel),
 		packet.(enetPacket).cPacket,
 	)
 	return nil

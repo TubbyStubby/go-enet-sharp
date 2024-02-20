@@ -10,12 +10,12 @@ First, you might need to install enet as a dependency:
 * **MacOS**: Install the enet package with brew: `brew install enet`
 
 ```
-$ go get github.com/codecat/go-enet
+$ go get github.com/TubbyStubby/go-enet-sharp
 ```
 
 ## Usage
 ```go
-import "github.com/codecat/go-enet"
+import "github.com/TubbyStubby/go-enet-sharp"
 ```
 
 The API is mostly the same as the C API, except it's more object-oriented.
@@ -27,7 +27,7 @@ This is a basic server example that responds to packets `"ping"` and `"bye"`.
 package main
 
 import (
-	"github.com/codecat/go-enet"
+	"github.com/TubbyStubby/go-enet-sharp"
 	"github.com/codecat/go-libs/log"
 )
 
@@ -99,7 +99,7 @@ This is a basic client example that sends a ping to the server every second that
 package main
 
 import (
-	"github.com/codecat/go-enet"
+	"github.com/TubbyStubby/go-enet-sharp"
 	"github.com/codecat/go-libs/log"
 )
 

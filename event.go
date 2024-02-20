@@ -1,6 +1,6 @@
 package enet
 
-// #include <enet/enet.h>
+// #include "enet/enet.h"
 import "C"
 
 // EventType is a type of event
@@ -38,7 +38,7 @@ type Event interface {
 }
 
 type enetEvent struct {
-	cEvent C.struct__ENetEvent
+	cEvent C.ENetEvent
 }
 
 func (event *enetEvent) GetType() EventType {

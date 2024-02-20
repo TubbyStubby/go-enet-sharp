@@ -1,6 +1,6 @@
 package enet
 
-// #include <enet/enet.h>
+// #include "enet/enet.h"
 import "C"
 import (
 	"errors"
@@ -24,7 +24,7 @@ const (
 
 	// PacketFlagUnreliableFragment packets will be fragmented using unreliable (instead of
 	// reliable) sends if it exceeds the MTU
-	PacketFlagUnreliableFragment = C.ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT
+	PacketFlagUnreliableFragment = C.ENET_PACKET_FLAG_UNRELIABLE_FRAGMENTED
 
 	// PacketFlagSent specifies whether the packet has been sent from all queues it has been
 	// entered into
@@ -39,7 +39,7 @@ type Packet interface {
 }
 
 type enetPacket struct {
-	cPacket *C.struct__ENetPacket
+	cPacket *C.ENetPacket
 }
 
 func (packet enetPacket) Destroy() {
@@ -63,7 +63,7 @@ func NewPacket(data []byte, flags PacketFlags) (Packet, error) {
 	packet := C.enet_packet_create(
 		buffer,
 		(C.size_t)(len(data)),
-		(C.enet_uint32)(flags),
+		(C.uint32_t)(flags),
 	)
 	C.free(buffer)
 

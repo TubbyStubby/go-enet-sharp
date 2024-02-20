@@ -1,6 +1,6 @@
 package enet
 
-// #include <enet/enet.h>
+// #include "enet/enet.h"
 import "C"
 import (
 	"errors"
@@ -13,14 +13,13 @@ type Host interface {
 
 	Connect(addr Address, channelCount int, data uint32) (Peer, error)
 
-	CompressWithRangeCoder() error
 	BroadcastBytes(data []byte, channel uint8, flags PacketFlags) error
 	BroadcastPacket(packet Packet, channel uint8) error
 	BroadcastString(str string, channel uint8, flags PacketFlags) error
 }
 
 type enetHost struct {
-	cHost *C.struct__ENetHost
+	cHost *C.ENetHost
 }
 
 func (host *enetHost) Destroy() {
@@ -32,7 +31,7 @@ func (host *enetHost) Service(timeout uint32) Event {
 	C.enet_host_service(
 		host.cHost,
 		&ret.cEvent,
-		(C.enet_uint32)(timeout),
+		(C.uint32_t)(timeout),
 	)
 	return ret
 }
@@ -42,7 +41,7 @@ func (host *enetHost) Connect(addr Address, channelCount int, data uint32) (Peer
 		host.cHost,
 		&(addr.(*enetAddress)).cAddr,
 		(C.size_t)(channelCount),
-		(C.enet_uint32)(data),
+		(C.uint32_t)(data),
 	)
 
 	if peer == nil {
@@ -54,21 +53,9 @@ func (host *enetHost) Connect(addr Address, channelCount int, data uint32) (Peer
 	}, nil
 }
 
-func (host *enetHost) CompressWithRangeCoder() error {
-	status := C.enet_host_compress_with_range_coder(host.cHost)
-
-	if status == -1 {
-		return errors.New("couldn't set the packet compressor to default range coder because context is nil")
-	} else if status != 0 {
-		return errors.New("couldn't set the packet compressor to default range coder for unknown reason")
-	}
-
-	return nil
-}
-
 // NewHost creats a host for communicating to peers
-func NewHost(addr Address, peerCount, channelLimit uint64, incomingBandwidth, outgoingBandwidth uint32) (Host, error) {
-	var cAddr *C.struct__ENetAddress
+func NewHost(addr Address, peerCount, channelLimit uint64, incomingBandwidth, outgoingBandwidth uint32, bufferLimit int) (Host, error) {
+	var cAddr *C.ENetAddress
 	if addr != nil {
 		cAddr = &(addr.(*enetAddress)).cAddr
 	}
@@ -77,8 +64,9 @@ func NewHost(addr Address, peerCount, channelLimit uint64, incomingBandwidth, ou
 		cAddr,
 		(C.size_t)(peerCount),
 		(C.size_t)(channelLimit),
-		(C.enet_uint32)(incomingBandwidth),
-		(C.enet_uint32)(outgoingBandwidth),
+		(C.uint32_t)(incomingBandwidth),
+		(C.uint32_t)(outgoingBandwidth),
+		(C.int)(bufferLimit),
 	)
 
 	if host == nil {
@@ -101,7 +89,7 @@ func (host *enetHost) BroadcastBytes(data []byte, channel uint8, flags PacketFla
 func (host *enetHost) BroadcastPacket(packet Packet, channel uint8) error {
 	C.enet_host_broadcast(
 		host.cHost,
-		(C.enet_uint8)(channel),
+		(C.uint8_t)(channel),
 		packet.(enetPacket).cPacket,
 	)
 	return nil

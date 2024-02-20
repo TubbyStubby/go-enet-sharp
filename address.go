@@ -4,7 +4,7 @@ import (
 	"unsafe"
 )
 
-// #include <enet/enet.h>
+// #include "enet/enet.h"
 import "C"
 
 // Address specifies a portable internet address structure.
@@ -18,16 +18,17 @@ type Address interface {
 }
 
 type enetAddress struct {
-	cAddr C.struct__ENetAddress
+	cAddr C.ENetAddress
 }
 
 func (addr *enetAddress) SetHostAny() {
-	addr.cAddr.host = C.ENET_HOST_ANY
+	//TODO: fix ipv6 ENET_HOST_ANY assignment
+	addr.SetHost("::")
 }
 
 func (addr *enetAddress) SetHost(hostname string) {
 	cHostname := C.CString(hostname)
-	C.enet_address_set_host(
+	C.enet_address_set_hostname(
 		&addr.cAddr,
 		cHostname,
 	)
@@ -35,15 +36,15 @@ func (addr *enetAddress) SetHost(hostname string) {
 }
 
 func (addr *enetAddress) SetPort(port uint16) {
-	addr.cAddr.port = (C.enet_uint16)(port)
+	addr.cAddr.port = (C.uint16_t)(port)
 }
 
 func (addr *enetAddress) String() string {
-	buffer := C.malloc(32)
-	C.enet_address_get_host_ip(
+	buffer := C.malloc(1025)
+	C.enet_address_get_ip(
 		&addr.cAddr,
 		(*C.char)(buffer),
-		32,
+		1025,
 	)
 	ret := C.GoString((*C.char)(buffer))
 	C.free(buffer)

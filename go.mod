@@ -1,3 +1,3 @@
-module github.com/codecat/go-enet
+module github.com/TubbyStubby/go-enet-sharp
 
-go 1.19
+go 1.21.0
