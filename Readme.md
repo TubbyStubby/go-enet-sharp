@@ -1,8 +1,8 @@
 # go-enet
-Enet-CSharp ([github.com/nxrighthere/ENet-CSharp](github.com/nxrighthere/ENet-CSharp)) bindings for Go using cgo.
+Enet-CSharp ([github.com/nxrighthere/ENet-CSharp](https://github.com/nxrighthere/ENet-CSharp)) bindings for Go using cgo.
 
 # Note
-This is just a port of [github.com/codecat/go-enet](github.com/codecat/go-enet) for [ENet-CSharp]((github.com/nxrighthere/ENet-CSharp)) which has independent enet implementation with a modified protocol.
+This is just a port of [github.com/codecat/go-enet](https://github.com/codecat/go-enet) for [ENet-CSharp]((https://github.com/nxrighthere/ENet-CSharp)) which has independent enet implementation with a modified protocol.
 
 ## Installation
 Works out of the box!
