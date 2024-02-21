@@ -15,9 +15,8 @@ const (
 	EventConnect
 
 	// EventDisconnect means that a peer has disconnected. This event is generated on a
-	// successful completion of a disconnect initiated by Peer.Disconnect, if a peer has
-	// timed out, or if a connection request intialized by Host.Connect has timed out. The
-	// peer field contains the peer which disconnected. The data field contains user supplied
+	// successful completion of a disconnect initiated by Peer.Disconnect.
+	// The peer field contains the peer which disconnected. The data field contains user supplied
 	// data describing the disconnection, or 0, if none is available.
 	EventDisconnect
 
@@ -26,6 +25,10 @@ const (
 	// number upon which the packet was received. The packet field contains the packet that
 	// was received; this packet must be destroyed with Packet.Destroy after use.
 	EventReceive
+
+	// This means peer has disconnected due to timeout or the connection request initialized by
+	// Host.Connect has timedout.
+	EventDisconnectTimeout
 )
 
 // Event as returned by Host.Service()

@@ -17,6 +17,17 @@ type Peer interface {
 	DisconnectNow(data uint32)
 	DisconnectLater(data uint32)
 
+	// Sets a timeout parameters for a peer. The timeout parameters control how and
+	// when a peer will timeout from a failure to acknowledge reliable traffic.
+	// Timeout values used in the semi-linear mechanism, where if a reliable packet
+	// is not acknowledged within an average round-trip time plus a variance tolerance
+	// until timeout reaches a set limit. If the timeout is thus at this limit and reliable
+	// packets have been sent but not acknowledged within a certain minimum time period, the peer
+	// will be disconnected. Alternatively, if reliable packets have been sent but not
+	// acknowledged for a certain maximum time period, the peer will be disconnected regardless
+	// of the current timeout limit value.
+	SetTimeout(limit uint32, min uint32, max uint32)
+
 	SendBytes(data []byte, channel uint8, flags PacketFlags) error
 	SendString(str string, channel uint8, flags PacketFlags) error
 	SendPacket(packet Packet, channel uint8) error
@@ -69,6 +80,15 @@ func (peer enetPeer) DisconnectLater(data uint32) {
 	C.enet_peer_disconnect_later(
 		peer.cPeer,
 		(C.uint32_t)(data),
+	)
+}
+
+func (peer enetPeer) SetTimeout(limit uint32, min uint32, max uint32) {
+	C.enet_peer_timeout(
+		peer.cPeer,
+		(C.uint32_t)(limit),
+		(C.uint32_t)(min),
+		(C.uint32_t)(max),
 	)
 }
 
