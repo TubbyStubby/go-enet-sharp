@@ -50,6 +50,8 @@ type Peer interface {
 	//
 	// http://enet.bespin.org/structENetPeer.html#a1873959810db7ac7a02da90469ee384e
 	GetData() []byte
+
+	PingInterval(intterval int32)
 }
 
 type enetPeer struct {
@@ -165,4 +167,11 @@ func (peer enetPeer) GetData() []byte {
 		// As many bytes as were indicated in the header.
 		C.int(binary.LittleEndian.Uint32(header)),
 	))
+}
+
+func (peer enetPeer) PingInterval(interval int32) {
+	C.enet_peer_ping_interval(
+		peer.cPeer,
+		(C.uint32_t)(interval),
+	)
 }
