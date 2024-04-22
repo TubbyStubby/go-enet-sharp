@@ -52,6 +52,11 @@ type Peer interface {
 	GetData() []byte
 
 	PingInterval(intterval uint32)
+
+	GetBytesSent() uint64
+	GetBytesReceived() uint64
+	GetPacketsSent() uint64
+	GetPacketsLost() uint64
 }
 
 type enetPeer struct {
@@ -174,4 +179,20 @@ func (peer enetPeer) PingInterval(interval uint32) {
 		peer.cPeer,
 		(C.uint32_t)(interval),
 	)
+}
+
+func (peer enetPeer) GetBytesSent() uint64 {
+	return uint64(C.enet_peer_get_bytes_sent(peer.cPeer))
+}
+
+func (peer enetPeer) GetPacketsSent() uint64 {
+	return uint64(C.enet_peer_get_packets_sent(peer.cPeer))
+}
+
+func (peer enetPeer) GetBytesReceived() uint64 {
+	return uint64(C.enet_peer_get_bytes_received(peer.cPeer))
+}
+
+func (peer enetPeer) GetPacketsLost() uint64 {
+	return uint64(C.enet_peer_get_packets_lost(peer.cPeer))
 }

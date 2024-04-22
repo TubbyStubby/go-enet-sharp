@@ -16,6 +16,16 @@ type Host interface {
 	BroadcastBytes(data []byte, channel uint8, flags PacketFlags) error
 	BroadcastPacket(packet Packet, channel uint8) error
 	BroadcastString(str string, channel uint8, flags PacketFlags) error
+
+	GetBytesSent() uint32
+	GetBytesReceived() uint32
+	GetPacketsSent() uint32
+	GetPacketsReceived() uint32
+
+	ResetBytesSent()
+	ResetBytesReceived()
+	ResetPacketsSent()
+	ResetPacketsReceived()
 }
 
 type enetHost struct {
@@ -101,4 +111,36 @@ func (host *enetHost) BroadcastString(str string, channel uint8, flags PacketFla
 		return err
 	}
 	return host.BroadcastPacket(packet, channel)
+}
+
+func (host *enetHost) GetBytesSent() uint32 {
+	return uint32(C.enet_host_get_bytes_sent(host.cHost))
+}
+
+func (host *enetHost) GetPacketsSent() uint32 {
+	return uint32(C.enet_host_get_packets_sent(host.cHost))
+}
+
+func (host *enetHost) GetBytesReceived() uint32 {
+	return uint32(C.enet_host_get_bytes_received(host.cHost))
+}
+
+func (host *enetHost) GetPacketsReceived() uint32 {
+	return uint32(C.enet_host_get_packets_received(host.cHost))
+}
+
+func (host *enetHost) ResetBytesSent() {
+	host.cHost.totalSentData = 0
+}
+
+func (host *enetHost) ResetBytesReceived() {
+	host.cHost.totalReceivedData = 0
+}
+
+func (host *enetHost) ResetPacketsSent() {
+	host.cHost.totalSentPackets = 0
+}
+
+func (host *enetHost) ResetPacketsReceived() {
+	host.cHost.totalReceivedPackets = 0
 }
