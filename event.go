@@ -44,7 +44,7 @@ type enetEvent struct {
 	cEvent C.ENetEvent
 }
 
-func New() *enetEvent {
+func NewEvent() *enetEvent {
 	return &enetEvent{}
 }
 
