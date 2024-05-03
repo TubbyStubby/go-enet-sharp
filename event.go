@@ -44,6 +44,10 @@ type enetEvent struct {
 	cEvent C.ENetEvent
 }
 
+func New() *enetEvent {
+	return &enetEvent{}
+}
+
 func (event *enetEvent) GetType() EventType {
 	return (EventType)(event.cEvent._type)
 }
